@@ -54,3 +54,10 @@ Qed.
 (* BEGIN FIX *)
 Lemma assoc (n m o : Nat) : n + (m + o) = (n + m) + o.
 (* END FIX *)
+induction n as [|n' H].
+simpl.
+reflexivity.
+simpl.
+rewrite <- H.
+reflexivity.
+Qed.
