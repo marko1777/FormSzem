@@ -59,6 +59,7 @@ Fixpoint optim2 (a : aexp) : aexp :=
   | APlus (ANum n) (ANum m) => ANum (n + m)
   | APlus a1 a2 => APlus (optim2 a1) (optim2 a2)
   | AMinus a1 a2 => AMinus (optim2 a1) (optim2 a2)
+<<<<<<< HEAD
   | AMult a1 a2 => AMult (optim2 a1) (optim2 a2)
 end.
 
@@ -71,3 +72,19 @@ Lemma optim_2 (a : aexp) : aeval (optim2 a) = aeval a.
 simpl. reflexivity. simpl. destruct n;
 try (simpl; simpl in IHa2; rewrite <- IHa2; reflexivity);
 simpl. rewrite ->IHa2. simpl in IHa2. rewrite -> IHa1. 
+=======
+  | AMult a1 a2 => AMult (opt im2 a1) (optim2 a2)
+end.
+
+Lemma optim_2 (a : aexp) : aeval (optim2 a) = aeval a.
+ intros;
+ induction a;
+ try (simpl; reflexivity);
+ try (simpl; rewrite -> IHa1; rewrite -> IHa2; reflexivity).
+ simpl; destruct a1; destruct a2; 
+ try (simpl; reflexivity);
+ try (simpl; simpl in IHa2; rewrite -> IHa2; reflexivity);
+ try (simpl; simpl in IHa1; rewrite -> IHa1; reflexivity);
+ try (simpl; simpl in IHa1; simpl in IHa2; rewrite -> IHa2; rewrite -> IHa1; reflexivity).
+Qed.
+>>>>>>> ecfbd37e44cf07ca784f9447d289c0fadd2100b6
