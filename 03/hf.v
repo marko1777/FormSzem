@@ -31,20 +31,49 @@ end.
 Example height_test_1 : height exTree1 = 2.
 (* END FIX *)
 simpl.
+reflexivity.
+Qed.
 
 (* BEGIN FIX *)
 Example height_test_2 : height exTree2 = 4.
 (* END FIX *)
 simpl.
+reflexivity.
+Qed.
 
 (* BEGIN FIX *)
 Lemma max_0 (m : nat) : max m 0 = m.
 (* END FIX *)
+simpl.
+induction m as [|m H].
+simpl.
+reflexivity.
+simpl.
+reflexivity.
+Qed.
 
 (* BEGIN FIX *)
 Lemma height_Leaf (t : Tree) : height (Node2 t Leaf) = height (Node2 Leaf t).
 (* END FIX *)
+simpl.
+rewrite -> max_0.
+reflexivity.
+Qed.
 
 (* BEGIN FIX *)
 Lemma max_comm : forall (m n : nat),  max m n = max n m.
 (* END FIX *)
+induction m as[|m' H].
+intros.
+rewrite -> max_0.
+simpl.
+reflexivity.
+intros.
+simpl.
+induction n as [|n' H2].
+simpl.
+reflexivity.
+simpl.
+rewrite -> H.
+reflexivity.
+Qed.
