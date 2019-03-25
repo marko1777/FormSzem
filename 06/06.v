@@ -1,0 +1,47 @@
+Require Import Coq.Strings.String.
+
+Inductive aexp : Type :=
+  | ANum : nat -> aexp
+  | AVar : string -> aexp
+  | APlus : aexp -> aexp -> aexp.
+
+Fixpoint closed (e : aexp) : bool :=
+  match e with
+  | ANum n => true
+  | AVar x => false
+  | APlus a a' => closed(a) && closed(a')
+end.
+
+Example ex1 : closed (APlus (ANum 3) (ANum 4)) = true.
+simpl. reflexivity. Qed.
+
+Example ex2 : closed (APlus (ANum 3) (AVar "x")) = false.
+simpl. reflexivity. Qed.
+
+Definition state : Type := string -> nat.
+
+Fixpoint aeval (e : aexp)(s : state) : nat := 
+  match e with
+  | ANum n => n
+  | AVar x => s x
+  | APlus a a' => aeval a s + aeval a' s
+end.
+
+Lemma truee(b1 b2 : bool) : (b1 && b2)%bool = true -> and (b1 = true) (b2 = true).
+destruct b1. simpl. destruct b2. auto. auto. simpl. discriminate. Qed.
+
+Theorem closedEval (e : aexp)(s s' : state)(p : closed e = true) : aeval e s = aeval e s'.
+induction e. simpl. reflexivity. simpl. simpl in p. discriminate p. simpl. rewrite <- IHe1. rewrite <- IHe2.
+reflexivity. simpl in p. apply truee in p. destruct p. rewrite -> H0. reflexivity. simpl in p. apply truee in p. destruct p.
+rewrite -> H. reflexivity. Qed. 
+
+
+Inductive zart : aexp -> Prop :=
+  | szam (n : nat) : zart (ANum n)
+  | osszeg(a a' : aexp)(az : zart a)(a'z : zart a') : zart (APlus a a').
+
+Example pl1 : zart (APlus (ANum 3) (ANum 4)).
+apply osszeg. apply szam. apply szam. Qed.
+
+Example pl3 : zart (APlus (ANum 3) (APlus (ANum 1) (ANum 2))).
+intros. apply osszeg. apply szam. apply osszeg; apply szam. Qed.
