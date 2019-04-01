@@ -102,6 +102,15 @@ apply fpluslt. apply (ftranst _ (12 +' 5, st)). apply (fpluslt). apply vart.
 apply (fplusrt 12 5 5 st). apply numt.
 (apply (fplusrt 17 34 Z st)). apply vart. Qed.
 
+(* HINT: use plus_0_r at some point. *)
+Lemma zeror (a : aexp)(s : state)(i : nat)(p : (a , s) f=> i) :
+  (a +' 0 , s) f=> i.
+(* END FIX *)
+rewrite <- plus_0_r with (n:= i).
+apply (ftrans _ (i +' 0, s)). apply fplusl. apply p.
+apply (fplusr i 0 (ANum 0) s). apply num.
+Qed.
+
 
 (*https://en.wikipeapply (fplusrt 17 34 Z st).
 dia.org/wiki/Feit%E2%80%93Thompson_theorem  coq*)
