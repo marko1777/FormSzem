@@ -1,9 +1,18 @@
-module Hf5 where
+module Hf7 where
 
-remove :: a -> [a] -> [a]
+digits :: Integer -> [Integer]
 
-remove a (x:xs)
-    | (a == x) = xs
-    | otherwise = x : remove a xs
+digits x 
+    | x < 10 = [mod x 10]
+    | otherwise = (mod x 10) : digits (div x 10)
 
-remove a [] = []
+squareSum :: [Integer] -> Integer
+
+squareSum l = sum (map (\x -> x^2) l)
+
+happy :: Integer -> Bool
+
+happy x
+    | squareSum (digits x) == 1 = True
+    | squareSum (digits x) == 0 = False
+    | otherwise = happy (squareSum (digits x))
